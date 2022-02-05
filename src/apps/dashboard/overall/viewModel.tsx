@@ -11,6 +11,10 @@ const useViewModel = () => {
   const [data, setData] = useState<Data[]>([]);
   const [errorsRows, setErrorsRows] = useState<number[]>([0, 3]);
 
+  const findErr = (indexCount: number) => {
+    return errorsRows.find((item) => item === indexCount);
+  };
+
   const errRowsCountPlus = (errorsRows: number[], index: number) => {
     return errorsRows.map((item) => {
       if (item > index) {
@@ -31,44 +35,23 @@ const useViewModel = () => {
     });
   };
 
-  useEffect(() => {
-    getDataFn();
-  }, []);
-
-  const getDataFn = () => {
-    getData()
-      .then((result) => {
-        setData(result);
-      })
-      .catch(() => {});
-  };
-
   const findAndFilterErr = (errorsRows: number[], index: number) => {
-    const findErr = errorsRows.find((item) => index === item);
+    const findErrRows = findErr(index);
     let errTemp = errorsRows;
-    if (findErr !== undefined) {
+    if (findErrRows !== undefined) {
       errTemp = errorsRows.filter((item) => item !== index);
     }
     return errTemp;
-  };
-
-  const onRemoveData = (index: number) => {
-    const dataTemp = data.filter((_item, i) => i !== index);
-    setData(dataTemp);
-
-    const errTemp = findAndFilterErr(errorsRows, index);
-    const errRows = errRowsCountMinus(errTemp, index);
-    setErrorsRows([...errRows]);
   };
 
   const findAndDupErr = (errorsRows: number[], index: number) => {
     let errorsRowsTemp = errorsRows;
     let isContinue = true;
     let indexCount = index;
-    const findDupErr = errorsRows.find((item) => item === indexCount);
+    const findDupErr = findErr(index);
     if (findDupErr !== undefined) {
       while (isContinue) {
-        const findDupErr = errorsRows.find((item) => item === indexCount);
+        const findDupErr = findErr(indexCount);
         if (findDupErr !== undefined) {
           indexCount += 1;
         } else {
@@ -81,6 +64,27 @@ const useViewModel = () => {
       errorsRowsTemp,
       indexCount,
     };
+  };
+
+  useEffect(() => {
+    getDataFn();
+  }, []);
+
+  const getDataFn = () => {
+    getData()
+      .then((result) => {
+        setData(result);
+      })
+      .catch(() => {});
+  };
+
+  const onRemoveData = (index: number) => {
+    const dataTemp = data.filter((_item, i) => i !== index);
+    setData(dataTemp);
+
+    const errTemp = findAndFilterErr(errorsRows, index);
+    const errRows = errRowsCountMinus(errTemp, index);
+    setErrorsRows([...errRows]);
   };
 
   const onDuplicateData = (index: number) => {
