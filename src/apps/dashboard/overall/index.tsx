@@ -1,11 +1,10 @@
 import { Table, TableBody } from "baseUI/table";
-import { useViewModel } from "../useViewModel";
 import { TableColumn } from "./components/tableColumn";
 import { TableRow } from "./components/tableRow";
+import useViewModel from "./viewModel";
 
 export const OverallPage = () => {
   const { data, onRemoveData, onDuplicateData, errorsRows } = useViewModel();
-
   return (
     <div className=" p-8 pt-[72px] mx-auto">
       <Table>
