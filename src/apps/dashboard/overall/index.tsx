@@ -1,7 +1,7 @@
 import { Table, TableBody } from "baseUI/table";
 import { TableColumn } from "./components/tableColumn";
 import { TableRow } from "./components/tableRow";
-import useViewModel from "./viewModel";
+import useViewModel from "./viewModel3";
 
 export const OverallPage = () => {
   const { data, onRemoveData, onDuplicateData, errorsRows } = useViewModel();
